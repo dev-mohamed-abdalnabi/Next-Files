@@ -19,9 +19,9 @@ android {
     signingConfigs {
         create("release") {
             storeFile = file("release.jks")
-            storePassword = "***REMOVED_SIGNING_SECRET***"
-            keyAlias = "next"
-            keyPassword = "***REMOVED_SIGNING_SECRET***"
+            storePassword = System.getenv("NEXT_FILES_STORE_PASSWORD") ?: error("NEXT_FILES_STORE_PASSWORD is required for release builds")
+            keyAlias = System.getenv("NEXT_FILES_KEY_ALIAS") ?: error("NEXT_FILES_KEY_ALIAS is required for release builds")
+            keyPassword = System.getenv("NEXT_FILES_KEY_PASSWORD") ?: error("NEXT_FILES_KEY_PASSWORD is required for release builds")
         }
     }
 
@@ -32,7 +32,7 @@ android {
             signingConfig = signingConfigs.getByName("release")
         }
         debug {
-            signingConfig = signingConfigs.getByName("release")
+            // Use the standard debug keystore; release signing stays in CI secrets.
         }
     }
 
